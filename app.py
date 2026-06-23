@@ -1,19 +1,10 @@
-from agents.severity_agent import analyze_severity
-from agents.risk_agent import analyze_risk
-from agents.stakeholder_agent import identify_stakeholders
+from utils.github_reader import get_commits
 
-def main():
-    print("ReleasePilot AI Started")
+repo_url = input("Enter GitHub Repo URL: ")
 
-    release_notes = "Fixed login bug and improved dashboard speed"
+print("\nAnalyzing Repository...\n")
 
-    severity = analyze_severity(release_notes)
-    risk = analyze_risk(release_notes)
-    stakeholders = identify_stakeholders(release_notes)
+commits = get_commits(repo_url)
 
-    print("Severity:", severity)
-    print("Risk:", risk)
-    print("Stakeholders:", stakeholders)
-
-if __name__ == "__main__":
-    main()
+for commit in commits:
+    print(commit)
