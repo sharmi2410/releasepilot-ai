@@ -1,10 +1,13 @@
+import streamlit as st
 from utils.github_reader import get_commits
 
-repo_url = input("Enter GitHub Repo URL: ")
+st.title("ReleasePilot AI")
 
-print("\nAnalyzing Repository...\n")
+repo_url = st.text_input("Enter GitHub Repository URL")
 
-commits = get_commits(repo_url)
+if st.button("Analyze Repository"):
+    commits = get_commits(repo_url)
 
-for commit in commits:
-    print(commit)
+    st.subheader("Recent Commit Messages")
+    for commit in commits:
+        st.write(commit)
