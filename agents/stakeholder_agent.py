@@ -1,30 +1,56 @@
 # agents/stakeholder_agent.py
 
-def identify_stakeholders(commit_messages):
-    stakeholder_rules = {
-        "security": ["Security Team", "Admin"],
-        "bug": ["Developers", "QA Team"],
-        "fix": ["Developers", "QA Team"],
-        "feature": ["Product Manager", "Developers"],
-        "ui": ["UI/UX Team", "Product Manager"],
-        "database": ["Database Admin", "Developers"],
-        "payment": ["Finance Team", "Product Manager"]
-    }
+def generate_stakeholder_summary(commit_messages):
 
-    stakeholder_report = []
+    summaries = []
 
     for commit in commit_messages:
+
         commit_lower = commit.lower()
-        assigned = ["Developers"]   # default
 
-        for keyword, team in stakeholder_rules.items():
-            if keyword in commit_lower:
-                assigned = team
-                break
+        if "auth" in commit_lower or "security" in commit_lower:
+            summary = {
+                "stakeholder": "Manager",
+                "message": "Security-related changes were made. Extra testing and review are recommended."
+            }
 
-        stakeholder_report.append({
+        elif "fix" in commit_lower or "bug" in commit_lower:
+            summary = {
+                "stakeholder": "QA Team",
+                "message": "A bug fix was introduced. Please verify functionality before release."
+            }
+
+        elif "feature" in commit_lower or "feat" in commit_lower or "add" in commit_lower:
+            summary = {
+                "stakeholder": "Product Team",
+                "message": "A new feature was added. Update product documentation if required."
+            }
+
+        else:
+            summary = {
+                "stakeholder": "Developer",
+                "message": "Minor code updates detected with low business impact."
+            }
+
+        summaries.append({
             "commit": commit,
-            "stakeholders": assigned
+            "stakeholder": summary["stakeholder"],
+            "message": summary["message"]
         })
 
-    return stakeholder_report
+    return summaries
+
+
+# Test Code
+if __name__ == "__main__":
+
+    sample_commits = [
+        "Fix authentication bug",
+        "Add payment feature",
+        "Update app.py"
+    ]
+
+    result = generate_stakeholder_summary(sample_commits)
+
+    for item in result:
+        print(item)

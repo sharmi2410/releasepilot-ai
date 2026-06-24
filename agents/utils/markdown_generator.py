@@ -1,21 +1,37 @@
-def generate_markdown(commits, severity="Medium", risk="Low Risk", stakeholders=None):
-    if stakeholders is None:
-        stakeholders = []
+# agents/utils/markdown_generator.py
 
-    markdown_content = "# Release Notes\n\n"
+def generate_markdown(severity_report):
 
-    markdown_content += "## Commit Summary\n"
-    for commit in commits:
-        markdown_content += f"- {commit}\n"
+    markdown = "# ReleasePilot AI Report\n\n"
 
-    markdown_content += "\n## Severity Level\n"
-    markdown_content += f"{severity}\n"
+    markdown += "## Commit Analysis\n\n"
 
-    markdown_content += "\n## Risk Analysis\n"
-    markdown_content += f"{risk}\n"
+    for item in severity_report:
 
-    markdown_content += "\n## Stakeholders\n"
-    for person in stakeholders:
-        markdown_content += f"- {person}\n"
+        markdown += f"### Severity: {item['severity']}\n"
+        markdown += f"- {item['commit']}\n\n"
 
-    return markdown_content
+    return markdown
+
+
+# Test Code
+if __name__ == "__main__":
+
+    sample_data = [
+        {
+            "commit": "Fix authentication bug",
+            "severity": "Critical"
+        },
+        {
+            "commit": "Update app.py",
+            "severity": "Medium"
+        },
+        {
+            "commit": "Refactor UI code",
+            "severity": "Low"
+        }
+    ]
+
+    report = generate_markdown(sample_data)
+
+    print(report)
