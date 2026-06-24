@@ -1,5 +1,4 @@
 # agents/severity_agent.py
-# agents/severity_agent.py
 
 def analyze_severity(commit_messages):
 

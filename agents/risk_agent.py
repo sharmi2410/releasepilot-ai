@@ -1,36 +1,48 @@
 # agents/risk_agent.py
 
 def analyze_risk(commit_messages):
-    risk_keywords = {
-        "bug": "High",
-        "fix": "Medium",
-        "security": "Critical",
-        "error": "High",
-        "crash": "Critical",
-        "update": "Low",
-        "refactor": "Low",
-        "feature": "Medium"
-    }
 
-    risk_report = []
+    risk_score = 0
 
     for commit in commit_messages:
+
         commit_lower = commit.lower()
-        found = False
 
-        for keyword, level in risk_keywords.items():
-            if keyword in commit_lower:
-                risk_report.append({
-                    "commit": commit,
-                    "risk_level": level
-                })
-                found = True
-                break
+        if (
+            "auth" in commit_lower
+            or "authentication" in commit_lower
+            or "security" in commit_lower
+        ):
+            risk_score += 4
 
-        if not found:
-            risk_report.append({
-                "commit": commit,
-                "risk_level": "Low"
-            })
+        elif (
+            "payment" in commit_lower
+            or "database" in commit_lower
+        ):
+            risk_score += 3
 
-    return risk_report
+        elif (
+            "fix" in commit_lower
+            or "bug" in commit_lower
+        ):
+            risk_score += 2
+
+        elif (
+            "feat" in commit_lower
+            or "feature" in commit_lower
+        ):
+            risk_score += 1
+
+    if risk_score >= 8:
+        risk_level = "High"
+
+    elif risk_score >= 4:
+        risk_level = "Medium"
+
+    else:
+        risk_level = "Low"
+
+    return {
+        "risk_score": risk_score,
+        "risk_level": risk_level
+    }
